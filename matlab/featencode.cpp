@@ -15,31 +15,35 @@ typedef int mwIndex;
 #define Malloc(type,n) (type *)malloc((n)*sizeof(type))
 #define INF HUGE_VAL
 
+/* variables */
+
+parameter param;				// options set by parse_command_line
+splineModel *model;				// spline model 
+bool inputModel = false;		// can provide model instead of optionf for encoding.
+int col_format_flag, nvec, dim; // other features
+double **x;						// pointer to features
+
+
+/* functions */
 void print_null(const char *s){}
 
 void exit_with_help()
 {
 	mexPrintf(
-	"Usage: [splinefeats, model] = splineencode(feats, [model or 'libspline_options'], 'col');\n"
-	"splinefeats : encoded features (in 'col' format)\n"
-	"model       : if libspline_options are provided instead of a model, then returns a model\n"		  
-	"libspline_options:\n"
-    "-t encoding : O Spline, 1 Fourier, 2 Hermite (default=0, t={0,1,2} )\n"
-	"-d degree   : set the degree of B-Spline basis (default=1, d={0,1,2,3} )\n"
-	"-r reg      : set the order of regularization (default=1) r={0,1,2,...}\n"
-	"-n bins     : set the number of bins (default 10)\n"
-	);
+			  "Usage: [encodedFeats, model] = featencode(feats, [model or 'options'], 'col');\n"
+			  "outputs:\n"
+			  "encodedFeats	: encoded features (Note, these are in 'col' format) \n"
+			  "model		: if options are provided instead of a model, then returns a model\n"		  
+			  "\noptions:\n"
+			  "-t type		: O Spline, 1 Trigonometric, 2 Hermite (default=0, t={0,1,2} )\n"
+			  "-d degree	: set the degree of B-Spline basis (default=1, d={0,1,2,3} )\n"
+			  "-r reg		: set the order of regularization (default=1) r={0,1,2,...}\n"
+			  "-n bins		: set the number of bins (default 10)\n"
+			  );
 }
 
-// libpwlinear arguments
-parameter param;		// set by parse_command_line
-splineModel *model;
-bool inputModel = false; 
-int col_format_flag, nvec, dim;
 
-// input training data
-double **x;
-
+/* encode features */
 int encode_features(mxArray *plhs[]){
 	//matlab matrices are in column format
 	plhs[0] = mxCreateDoubleMatrix(model->wdim,nvec, mxREAL);
@@ -72,8 +76,8 @@ int encode_features(mxArray *plhs[]){
 						for(k=0; k < model->numbasis;k++)
 							feat[fo+k] += xd[k];
 					}
-				}else if(model->encoding == FOURIER){
-					model->fourierEncoder(xi[j],j,xd);
+				}else if(model->encoding == TRIGONOMETRIC){
+					model->trigEncoder(xi[j],j,xd);
 					for(k=0; k < model->numbasis;k++)
 						feat[fo+k] += xd[k];
 				}else if(model->encoding == HERMITE){
@@ -90,7 +94,7 @@ int encode_features(mxArray *plhs[]){
 	return 0;
 }
 
-// nrhs should be 3
+/* parse command line */
 int parse_command_line(int nrhs, const mxArray *prhs[], char *model_file_name)
 {
 	int i, argc = 1;
@@ -211,7 +215,7 @@ const char* check_parameter(const parameter * param){
 	if(param->reg < 0){
 		return "regularization should be >= 0";
 	}
-	
+
 	if(param->numbins < 1){
 		return "numbins < 1";
 	}

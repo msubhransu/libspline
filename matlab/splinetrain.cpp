@@ -20,9 +20,9 @@ void print_null(const char *s){}
 void exit_with_help()
 {
 	mexPrintf(
-	"Usage: model = splinetrain(training_label_vector, training_instance_matrix, 'libpwlinear_options', 'col');\n"
-	"libspline_options:\n"
-	"-t type     : 0 Spline, 1 Fourier, 2 Hermite  (default=0)\n"
+	"Usage: model = splinetrain(training_label_vector, training_instance_matrix, 'options', 'col');\n"
+	"options:\n"
+	"-t type     : 0 Spline, 1 Trigonometric, 2 Hermite  (default=0)\n"
 	"-d degree   : set the B-Spline degree (default=1) d={0,1,2,3}\n"
 	"-r reg      : set the order of regularization (default=1) r={0,1,2,...}\n"
 	"-n bins     : set the number of bins (default 10)\n"

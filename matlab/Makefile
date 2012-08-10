@@ -13,11 +13,11 @@ MEX_EXT = $(shell $(MATLABDIR)/bin/mexext)
 
 all: matlab
 
-matlab: splinetrain.$(MEX_EXT) splinepredict.$(MEX_EXT) splineencode.$(MEX_EXT)
+matlab: splinetrain.$(MEX_EXT) splinepredict.$(MEX_EXT) featencode.$(MEX_EXT)
 #matlab: splinetrain.$(MEX_EXT) splinepredict.$(MEX_EXT)
 
-splineencode.$(MEX_EXT): splineencode.cpp ../splinemodel.h splinemodel.o spline_model_matlab.o
-	$(MEX) $(MEX_OPTION) splineencode.cpp splinemodel.o spline_model_matlab.o
+featencode.$(MEX_EXT): featencode.cpp ../splinemodel.h splinemodel.o spline_model_matlab.o
+	$(MEX) $(MEX_OPTION) featencode.cpp splinemodel.o spline_model_matlab.o
 
 splinepredict.$(MEX_EXT): splinepredict.cpp ../splinemodel.h splinemodel.o spline_model_matlab.o
 	$(MEX) $(MEX_OPTION) splinepredict.cpp splinemodel.o spline_model_matlab.o

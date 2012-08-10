@@ -16,6 +16,7 @@ template <class T> static inline T max(T x,T y) { return (x>y)?x:y; }
 #ifndef PI
 #define PI 3.14159265358979
 #endif
+
 //return the b-spline basis index for a given dimension
 void splineModel::getBasisIndex(double x, 
 								int dimidx, 
@@ -33,7 +34,7 @@ void splineModel::getBasisIndex(double x,
 	}
 }
 
-//computes the indices of and weights of the basis
+//B-Spline embedding
 void splineModel::bSplineEncoder(double x,
 								 int dimidx,
 								 int &ei,
@@ -65,7 +66,9 @@ void splineModel::bSplineEncoder(double x,
 			//should not happen	
 	}
 }
-void splineModel::fourierEncoder(double x, int dimidx, double *xd){
+
+// Trigonometic embedding 
+void splineModel::trigEncoder(double x, int dimidx, double *xd){
 	double cx = (xmax[dimidx] + xmin[dimidx])/2;
 	double dx = (xmax[dimidx] - xmin[dimidx])/2;
 	double t = PI*(x - cx)/dx;
@@ -82,6 +85,7 @@ void splineModel::fourierEncoder(double x, int dimidx, double *xd){
 	}
 	
 }
+// Hermite embedding
 void splineModel::hermiteEncoder(double x, int dimidx, double *xd){
 	double cx = (xmax[dimidx] + xmin[dimidx])/2;
 	double dx = (xmax[dimidx] - xmin[dimidx])/2;
@@ -130,7 +134,7 @@ splineModel::splineModel(const parameter *param,
 	numbins = param->numbins;
 	if(encoding == SPLINE){
 		numbasis = numbins + degree;
-	}else if(encoding == FOURIER){
+	}else if(encoding == TRIGONOMETRIC){
 		numbasis = degree*2;
 	}else if(encoding == HERMITE){
 		numbasis = degree;
@@ -147,7 +151,7 @@ splineModel::splineModel(const parameter *param,
 	b = new double[dim];
 	w = new double[wdim];
 	dimwts = NULL;
-	if(encoding == FOURIER){
+	if(encoding == TRIGONOMETRIC){
 		dimwts = new double[numbasis];
 		for(i=0;i < degree;i++){
 			dimwts[2*i] = 1.0/pow(i+1,reg);
@@ -216,7 +220,7 @@ splineModel::splineModel(const parameter *param,
 }
 
 
-// train the model using LIBLINEAR's algorithm
+// train the model using LIBLINEAR's dual coordinate descend algorithm
 // the learned model is L2 regularized, L1 loss (hinge loss) SVM
 void splineModel::splineTrain(double **x,             // training data
 							  const double *y,        // training labels
@@ -265,8 +269,8 @@ void splineModel::splineTrain(double **x,             // training data
 						for(k=0; k < numbasis;k++)
 							Q[i] += xd[k]*xd[k];
 					}
-				}else if(encoding == FOURIER){
-					fourierEncoder(xi[j],j,xd);
+				}else if(encoding == TRIGONOMETRIC){
+					trigEncoder(xi[j],j,xd);
 					for(k=0; k < numbasis;k++)
 						Q[i] += xd[k]*xd[k];
 				}else if(encoding == HERMITE){
@@ -308,8 +312,8 @@ void splineModel::splineTrain(double **x,             // training data
 						bSplineEncoder(xi[j],j,ei,ew);
 						for(k=0; k <= degree; k++)
 							G += st[j]*w[wo+ei-k]*ew[degree-k]; //sparse (implicit wd)
-					}else if(encoding == FOURIER){
-						fourierEncoder(xi[j],j,xd);
+					}else if(encoding == TRIGONOMETRIC){
+						trigEncoder(xi[j],j,xd);
 						for(k=0; k < numbasis; k++)
 							G += w[wo+k]*xd[k]; 
 					}else if(encoding == HERMITE){
@@ -380,8 +384,8 @@ void splineModel::splineTrain(double **x,             // training data
 								for(k=0; k < numbasis;k++)
 									w[wo+k] += d*xd[k];
 							}
-						}else if(encoding == FOURIER){
-							fourierEncoder(xi[j],j,xd);
+						}else if(encoding == TRIGONOMETRIC){
+							trigEncoder(xi[j],j,xd);
 							for(k=0; k < numbasis; k++)
 								w[wo+k] += d*xd[k]; //sparse (implicit wd)
 						}else if(encoding == HERMITE){
@@ -462,8 +466,8 @@ void splineModel::splinePredict(double **x,
 					bSplineEncoder(x[i][j],j,ei,ew);
 					for(k=0; k <= degree; k++)
 						di += st[j]*w[wo+ei-k]*ew[degree-k]; //sparse (implicit wd)
-				}else if(encoding == FOURIER){
-					fourierEncoder(x[i][j],j,xd);
+				}else if(encoding == TRIGONOMETRIC){
+					trigEncoder(x[i][j],j,xd);
 					for(k=0; k < numbasis; k++)
 						di += w[wo+k]*xd[k]; //sparse (implicit wd)
 				}else if(encoding == HERMITE){
@@ -505,7 +509,7 @@ void splineModel::getAccuracy(double *d, double *y, const int nvec,
 
 
 // compute the projection of features on the implicit weight vector
-// xd = D_d^{-1}D_d^{'-1}\phi(x)
+// xd = D_d^{-1}D_d^{'-1}\Phi(x)
 void splineModel::projectDenseW(int ei,
 								double *x,
 								double st,
@@ -517,7 +521,7 @@ void splineModel::projectDenseW(int ei,
 	}
 }
 // compute the dense features corresponding to the regularization
-// xd = D_d^{'-1}\phi(x)
+// xd = D_d^{'-1}\Phi(x)
 void splineModel::projectDense(int ei,
 							   double *x,
 							   double st,

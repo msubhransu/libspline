@@ -29,7 +29,7 @@ struct parameter {
 };
 
 // possible encodings
-enum ENCODING {SPLINE, FOURIER, HERMITE}; 
+enum ENCODING {SPLINE, TRIGONOMETRIC, HERMITE}; 
 
 //spline model
 class splineModel{
@@ -84,7 +84,7 @@ public:
 	void display();
 	void getBasisIndex(double x, int dimidx, int &ei, double &ai);
 	void bSplineEncoder(double x, int dimidx, int &ei, double *wts);
-	void fourierEncoder(double x, int dimidx, double *wts);
+	void trigEncoder(double x, int dimidx, double *wts);
 	void hermiteEncoder(double x, int dimidx, double *wts);
 	void projectDense(int ei, double *wts, double st, double *wd);
 	void projectDenseW(int ei, double *wts, double st, double *wd);

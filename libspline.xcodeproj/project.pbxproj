@@ -15,7 +15,7 @@
 		C18BA370137487E9000CD828 /* splinepredict.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = splinepredict.cpp; path = matlab/splinepredict.cpp; sourceTree = "<group>"; };
 		C18BA371137487E9000CD828 /* splinetrain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = splinetrain.cpp; path = matlab/splinetrain.cpp; sourceTree = "<group>"; };
 		C18BA37C1374DA8C000CD828 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		C18BA37D1374F3E3000CD828 /* splineencode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = splineencode.cpp; path = matlab/splineencode.cpp; sourceTree = "<group>"; };
+		C18BA37D1374F3E3000CD828 /* featencode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = featencode.cpp; path = matlab/featencode.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -23,7 +23,7 @@
 			isa = PBXGroup;
 			children = (
 				C18BA37C1374DA8C000CD828 /* README */,
-				C18BA37D1374F3E3000CD828 /* splineencode.cpp */,
+				C18BA37D1374F3E3000CD828 /* featencode.cpp */,
 				C18BA36E137487E9000CD828 /* spline_model_matlab.cpp */,
 				C18BA36F137487E9000CD828 /* spline_model_matlab.h */,
 				C18BA370137487E9000CD828 /* splinepredict.cpp */,
