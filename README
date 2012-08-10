@@ -1,0 +1,40 @@
+LIBSPLINE provides a quick way of training additive classifiers based on splines. 
+Per coordinate spline models (additive models) and can be more suitable for some 
+classification tasks than linear classifiers. 
+
+
+Usage: 
+
+model = splinetrain(training_label_vector, training_instance_matrix, 'libpwlinear_options', 'col');\n"
+	"libspline_options:\n"
+	"-d degree   : set the degree of B-Spline basis (default=1, d={0,1,2,3} )\n"
+	"-r reg      : set the order of regularization (default=1) r={0,1,2,...}\n"
+	"-n bins     : set the number of bins (default 10)\n"
+	"-c cost     : set the parameter C (default 1)\n"
+	"-e epsilon  : set tolerance of termination criterion\n"
+	"		       Dual maximal violation <= eps; similar to libsvm (default 0.1)\n"
+	"-B bias     : if bias >= 0, instance x becomes [x; bias]; if < 0, no bias term added (default 1)\n"
+	"-wi weight  : weights adjust the parameter C of different classes (see README for details)\n"
+	"col:\n"
+	"	if 'col' is set, training_instance_matrix is parsed in column format, otherwise is in row format\n"
+
+
+Details:
+
+-d degree : specifies the degree of uniformly spaced B-spline basis (d=0,1,2,3 are supported, corresponding to 
+			constant, linear, quadratic and cubic B-spline basis. 
+-r reg    : Regularization based on a difference matrix of order r. r=0 corresponds to identity matrix, r=1 
+			corresponds to a first order difference matrix, and r=2 is the second order (D1^2), and so on. 
+			Recommended values of r are 0,1,2.
+
+The rest of the options are based on LIBLINEAR's dual coordinate descent algorithm. See LIBLINEAR for more details. 
+
+If you find LIBSPLINE helpful, please cite it as
+
+LIBSPLINE : A Spline Library Based on LIBLINEAR
+www.cs.berkeley.edu/~smaji/projects/LIBSPLINE
+
+For any questions and comments, please send your email to
+smaji@cs.berkeley.edu
+
+
