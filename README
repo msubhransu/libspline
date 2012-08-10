@@ -1,13 +1,10 @@
-LIBSPLINE provides a quick way of training additive classifiers based on splines. 
-Per coordinate spline models (additive models) and can be more suitable for some 
-classification tasks than linear classifiers. 
-
+LIBSPLINE is a library for training additive classifiers based on B-splines. 
 
 Usage: 
 
-model = splinetrain(training_label_vector, training_instance_matrix, 'libpwlinear_options', 'col');\n"
-	"libspline_options:\n"
-	"-d degree   : set the degree of B-Spline basis (default=1, d={0,1,2,3} )\n"
+model = splinetrain(training_label_vector, training_instance_matrix, 'options', 'col');\n"
+	"options:\n"
+	"-d degree   : set the degree of B-Spline basis (default=1, d={0=constant,1=linear,2=quadratic,3=cubic} )\n"
 	"-r reg      : set the order of regularization (default=1) r={0,1,2,...}\n"
 	"-n bins     : set the number of bins (default 10)\n"
 	"-c cost     : set the parameter C (default 1)\n"
@@ -29,12 +26,16 @@ Details:
 
 The rest of the options are based on LIBLINEAR's dual coordinate descent algorithm. See LIBLINEAR for more details. 
 
-If you find LIBSPLINE helpful, please cite it as
+If you find LIBSPLINE helpful, please cite it as:
 
 LIBSPLINE : A Spline Library Based on LIBLINEAR
 www.cs.berkeley.edu/~smaji/projects/LIBSPLINE
 
 For any questions and comments, please send your email to
-smaji@cs.berkeley.edu
+smaji@ttic.edu
 
+Other useful references:
 
+[1] Max-margin Additive Classifiers for Detection, Subhransu Maji and Alexander C. Berg, ICCV 2009
+[2] Linearized Smooth Additive Classifiers, Subhransu Maji, Web-scale Vision and Social Media Workshop, ECCV 2012
+[3] Generalized linear additive smooth structures. Eilers, P., Marx, B., Journal of Computational and Graphical Statistics 11(4)
