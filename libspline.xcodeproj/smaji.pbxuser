@@ -1,0 +1,225 @@
+// !$*UTF8*$!
+{
+	97C0867A15D30A61001E40C8 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	97C0867B15D30A61001E40C8 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	97C0867C15D30A84001E40C8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C18BA13C137322FA000CD828 /* splinemodel.h */;
+		name = "splinemodel.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 981;
+		vrLoc = 0;
+	};
+	97C0867D15D30A84001E40C8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C18BA13B137322FA000CD828 /* splinemodel.cpp */;
+		name = "splinemodel.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1092;
+		vrLoc = 0;
+	};
+	97C0867E15D30A84001E40C8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C18BA33D13747B69000CD828 /* splinedemo.cpp */;
+		name = "splinedemo.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1364;
+		vrLoc = 0;
+	};
+	97C0867F15D30A84001E40C8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C18BA371137487E9000CD828 /* splinetrain.cpp */;
+		name = "splinetrain.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1572;
+		vrLoc = 0;
+	};
+	97C0868015D30A84001E40C8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C18BA370137487E9000CD828 /* splinepredict.cpp */;
+		name = "splinepredict.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1055;
+		vrLoc = 0;
+	};
+	97C0868115D30A84001E40C8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C18BA36F137487E9000CD828 /* spline_model_matlab.h */;
+		name = "spline_model_matlab.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 233;
+		vrLoc = 0;
+	};
+	97C0868215D30A84001E40C8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C18BA36E137487E9000CD828 /* spline_model_matlab.cpp */;
+		name = "spline_model_matlab.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 844;
+		vrLoc = 0;
+	};
+	97C0868315D30A84001E40C8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C18BA37D1374F3E3000CD828 /* splineencode.cpp */;
+		name = "splineencode.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1385;
+		vrLoc = 229;
+	};
+	97C0868415D30A84001E40C8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C18BA37C1374DA8C000CD828 /* README */;
+		name = "README: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1748;
+		vrLoc = 0;
+	};
+	97C0868515D30A84001E40C8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = C18BA37C1374DA8C000CD828 /* README */;
+		name = "README: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1831;
+		vrLoc = 0;
+	};
+	C18BA11913732176000CD828 /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		codeSenseManager = 97C0867B15D30A61001E40C8 /* Code sense */;
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					706,
+					20,
+					48.16259765625,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 366307610;
+			PBXWorkspaceStateSaveDate = 366307610;
+		};
+		perUserProjectItems = {
+			97C0867C15D30A84001E40C8 = 97C0867C15D30A84001E40C8 /* PBXTextBookmark */;
+			97C0867D15D30A84001E40C8 = 97C0867D15D30A84001E40C8 /* PBXTextBookmark */;
+			97C0867E15D30A84001E40C8 = 97C0867E15D30A84001E40C8 /* PBXTextBookmark */;
+			97C0867F15D30A84001E40C8 = 97C0867F15D30A84001E40C8 /* PBXTextBookmark */;
+			97C0868015D30A84001E40C8 = 97C0868015D30A84001E40C8 /* PBXTextBookmark */;
+			97C0868115D30A84001E40C8 = 97C0868115D30A84001E40C8 /* PBXTextBookmark */;
+			97C0868215D30A84001E40C8 = 97C0868215D30A84001E40C8 /* PBXTextBookmark */;
+			97C0868315D30A84001E40C8 = 97C0868315D30A84001E40C8 /* PBXTextBookmark */;
+			97C0868415D30A84001E40C8 = 97C0868415D30A84001E40C8 /* PBXTextBookmark */;
+			97C0868515D30A84001E40C8 = 97C0868515D30A84001E40C8 /* PBXTextBookmark */;
+		};
+		sourceControlManager = 97C0867A15D30A61001E40C8 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	C18BA13B137322FA000CD828 /* splinemodel.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {884, 7930}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1092}";
+		};
+	};
+	C18BA13C137322FA000CD828 /* splinemodel.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {884, 1365}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 981}";
+		};
+	};
+	C18BA33D13747B69000CD828 /* splinedemo.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {884, 1885}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1364}";
+		};
+	};
+	C18BA36E137487E9000CD828 /* spline_model_matlab.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {884, 4004}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 844}";
+		};
+	};
+	C18BA36F137487E9000CD828 /* spline_model_matlab.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {884, 630}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 233}";
+		};
+	};
+	C18BA370137487E9000CD828 /* splinepredict.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {936, 2756}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1055}";
+		};
+	};
+	C18BA371137487E9000CD828 /* splinetrain.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {884, 3302}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1572}";
+		};
+	};
+	C18BA37C1374DA8C000CD828 /* README */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {884, 630}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1831}";
+		};
+	};
+	C18BA37D1374F3E3000CD828 /* splineencode.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {884, 3796}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{229, 1385}";
+		};
+	};
+}
