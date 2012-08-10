@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "splinemodel.h"
 #include "mex.h"
-#include "spline_model_matlab.h"
+#include "additiveModel.h"
+#include "matlabModel.h"
 
 #if MX_API_VER < 0x07030000
 typedef int mwIndex;
@@ -15,14 +15,20 @@ typedef int mwIndex;
 #define Malloc(type,n) (type *)malloc((n)*sizeof(type))
 #define INF HUGE_VAL
 
+parameter param;				// parameters set by parse_command_line
+additiveModel *model;				// spline model
+int col_format_flag, nvec, dim;	// other options
+double **x, *y;					// input training data/labels
+
+
 void print_null(const char *s){}
 
 void exit_with_help()
 {
 	mexPrintf(
-	"Usage: model = splinetrain(training_label_vector, training_instance_matrix, 'options', 'col');\n"
+	"Usage: model = train(training_label_vector, training_instance_matrix, 'options', 'col');\n"
 	"options:\n"
-	"-t type     : 0 Spline, 1 Trigonometric, 2 Hermite  (default=0)\n"
+	"-t type     : 0: Spline, 1: Trigonometric, 2: Hermite  (default=0)\n"
 	"-d degree   : set the B-Spline degree (default=1) d={0,1,2,3}\n"
 	"-r reg      : set the order of regularization (default=1) r={0,1,2,...}\n"
 	"-n bins     : set the number of bins (default 10)\n"
@@ -36,14 +42,6 @@ void exit_with_help()
 	);
 }
 
-// libpwlinear arguments
-parameter param;		// set by parse_command_line
-splineModel *model;
-
-int col_format_flag, nvec, dim;
-
-// input training data/labels
-double **x, *y;
 
 // nrhs should be 3
 int parse_command_line(int nrhs, const mxArray *prhs[], char *model_file_name)
@@ -167,7 +165,7 @@ int read_problem_dense(const mxArray *label_vec, const mxArray *instance_mat)
 
 	if(label_vector_row_num!= nvec)
 	{
-		mexPrintf("Length of label vector does not match # of instances.\n");
+		mexPrintf("Error: Length of label vector does not match # of instances.\n");
 		return -1;
 	}
 	
@@ -237,7 +235,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 			err = read_problem_dense(prhs[0], prhs[1]);
 		else
 		{
-			mexPrintf("Training_instance_matrix must be dense\n");
+			mexPrintf("Error : training_instance_matrix must be dense\n");
 			fake_answer(plhs);
 			return;
 		}
@@ -254,12 +252,12 @@ void mexFunction( int nlhs, mxArray *plhs[],
 		}
 
 		const char *error_msg;
-		model = new splineModel(&param, x, dim, nvec); //initialize
-		model->splineTrain(x,y,nvec,&param); //train the model
+		model = new additiveModel(&param, x, dim, nvec); //initialize
+		model->train(x,y,nvec,&param); //train the model
 		error_msg = model_to_matlab_structure(plhs, model);
 
 		if(error_msg)
-			mexPrintf("Error: can't convert libpwlinear model to matrix structure: %s\n", error_msg);
+			mexPrintf("Error: can't convert spline model to matrix structure: %s\n", error_msg);
 		delete model;
 		delete [] x;
 	}

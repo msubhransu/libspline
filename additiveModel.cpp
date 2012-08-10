@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "splinemodel.h"
+#include "additiveModel.h"
 
 #define INF 1e10
 
@@ -18,7 +18,7 @@ template <class T> static inline T max(T x,T y) { return (x>y)?x:y; }
 #endif
 
 //return the b-spline basis index for a given dimension
-void splineModel::getBasisIndex(double x, 
+void additiveModel::getBasisIndex(double x, 
 								int dimidx, 
 								int &ei, 
 								double &ai){
@@ -35,7 +35,7 @@ void splineModel::getBasisIndex(double x,
 }
 
 //B-Spline embedding
-void splineModel::bSplineEncoder(double x,
+void additiveModel::bSplineEncoder(double x,
 								 int dimidx,
 								 int &ei,
 								 double *wts){
@@ -68,7 +68,7 @@ void splineModel::bSplineEncoder(double x,
 }
 
 // Trigonometic embedding 
-void splineModel::trigEncoder(double x, int dimidx, double *xd){
+void additiveModel::trigEncoder(double x, int dimidx, double *xd){
 	double cx = (xmax[dimidx] + xmin[dimidx])/2;
 	double dx = (xmax[dimidx] - xmin[dimidx])/2;
 	double t = PI*(x - cx)/dx;
@@ -86,7 +86,7 @@ void splineModel::trigEncoder(double x, int dimidx, double *xd){
 	
 }
 // Hermite embedding
-void splineModel::hermiteEncoder(double x, int dimidx, double *xd){
+void additiveModel::hermiteEncoder(double x, int dimidx, double *xd){
 	double cx = (xmax[dimidx] + xmin[dimidx])/2;
 	double dx = (xmax[dimidx] - xmin[dimidx])/2;
 	double t  = (x - cx)/dx;
@@ -101,8 +101,8 @@ void splineModel::hermiteEncoder(double x, int dimidx, double *xd){
 	}
 }
 
-//empty splineModel constructor
-splineModel::splineModel(){
+//empty additiveModel constructor
+additiveModel::additiveModel(){
 	encoding = SPLINE;
 	degree = 1; 
 	reg = 1; 
@@ -121,8 +121,8 @@ splineModel::splineModel(){
 }
 
 
-//initialize a splineModel given the data
-splineModel::splineModel(const parameter *param,
+//initialize a additiveModel given the data
+additiveModel::additiveModel(const parameter *param,
 						 double **x,
 						 int fdim, 
 						 int nvec){
@@ -222,7 +222,7 @@ splineModel::splineModel(const parameter *param,
 
 // train the model using LIBLINEAR's dual coordinate descend algorithm
 // the learned model is L2 regularized, L1 loss (hinge loss) SVM
-void splineModel::splineTrain(double **x,             // training data
+void additiveModel::train(double **x,             // training data
 							  const double *y,        // training labels
 							  const int nvec,         // number of training data
 							  const parameter *param) // training parameters
@@ -438,7 +438,7 @@ void splineModel::splineTrain(double **x,             // training data
 }//end of pwltrain
 
 // piecewise linear predictions using the trained model
-void splineModel::splinePredict(double **x,
+void additiveModel::predict(double **x,
 								double *d,
 								double *l,
 								const int nvec){
@@ -487,7 +487,7 @@ void splineModel::splinePredict(double **x,
 		delete [] xd;
 }
 //compute the accuracy
-void splineModel::getAccuracy(double *d, double *y, const int nvec,
+void additiveModel::getAccuracy(double *d, double *y, const int nvec,
 							  int& numcorrect, 
 							  double&acc, 
 							  double& prec, 
@@ -510,7 +510,7 @@ void splineModel::getAccuracy(double *d, double *y, const int nvec,
 
 // compute the projection of features on the implicit weight vector
 // xd = D_d^{-1}D_d^{'-1}\Phi(x)
-void splineModel::projectDenseW(int ei,
+void additiveModel::projectDenseW(int ei,
 								double *x,
 								double st,
 								double *xd){
@@ -522,7 +522,7 @@ void splineModel::projectDenseW(int ei,
 }
 // compute the dense features corresponding to the regularization
 // xd = D_d^{'-1}\Phi(x)
-void splineModel::projectDense(int ei,
+void additiveModel::projectDense(int ei,
 							   double *x,
 							   double st,
 							   double *xd){
@@ -541,7 +541,7 @@ void splineModel::projectDense(int ei,
 }
 
 // display the model
-void splineModel::display()
+void additiveModel::display()
 {
 	printf("Printing model:\n");
 	printf("       encoding = %d\n", encoding);
@@ -602,7 +602,7 @@ void splineModel::display()
 }
 
 // destructor
-splineModel::~splineModel()
+additiveModel::~additiveModel()
 {
 	delete [] xmax;
 	delete [] xmin;

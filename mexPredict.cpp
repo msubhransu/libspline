@@ -3,10 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "splinemodel.h"
-
 #include "mex.h"
-#include "spline_model_matlab.h"
+#include "additiveModel.h"
+#include "matlabModel.h"
 
 #if MX_API_VER < 0x07030000
 typedef int mwIndex;
@@ -21,8 +20,8 @@ void print_null(const char *s){}
 void exit_with_help()
 {
 	mexPrintf(
-	"Usage: [predicted_label,accuracy,decision_values] = splinepredict(test_label_vector, test_instance_matrix, pwlmodel, 'col');\n"
-	"libpwlinear options:\n"
+	"Usage: [predicted_label,accuracy,decision_values] = predict(test_label_vector, test_instance_matrix, model, 'col');\n"
+	"options:\n"
 	"	if 'col' is set, test_instance_matrix is parsed in column format, otherwise is in row format\n"
 	);
 }
@@ -31,7 +30,7 @@ int col_format_flag, nvec, dim;
 
 // input training data/labels
 double **x, *y;
-splineModel *model;
+additiveModel *model;
 
 // nrhs should be 3
 int parse_command_line(int nrhs, const mxArray *prhs[], char *model_file_name)
@@ -72,7 +71,7 @@ int do_predict(mxArray *plhs[]){
 	double *ptr_dec_values = mxGetPr(plhs[2]);
 	
 	//compute predictions
-	model->splinePredict(x,ptr_dec_values,ptr_labels, nvec); 
+	model->predict(x,ptr_dec_values,ptr_labels, nvec); 
 	
 	//compute accuracy
 	int numcorrect;
@@ -178,7 +177,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 		
 		
 		//initialize an empty model
-		model = new splineModel();
+		model = new additiveModel();
 		
 		error_msg = matlab_matrix_to_model(model,prhs[2]);
 		

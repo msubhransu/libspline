@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "splinemodel.h"
 #include "mex.h"
-#include "spline_model_matlab.h"
+#include "additiveModel.h"
+#include "matlabModel.h"
 
 #if MX_API_VER < 0x07030000
 typedef int mwIndex;
@@ -18,7 +18,7 @@ typedef int mwIndex;
 /* variables */
 
 parameter param;				// options set by parse_command_line
-splineModel *model;				// spline model 
+additiveModel *model;				// spline model 
 bool inputModel = false;		// can provide model instead of optionf for encoding.
 int col_format_flag, nvec, dim; // other features
 double **x;						// pointer to features
@@ -30,12 +30,12 @@ void print_null(const char *s){}
 void exit_with_help()
 {
 	mexPrintf(
-			  "Usage: [encodedFeats, model] = featencode(feats, [model or 'options'], 'col');\n"
+			  "Usage: [encodedFeats, model] = encode(feats, [model or 'options'], 'col');\n"
 			  "outputs:\n"
 			  "encodedFeats	: encoded features (Note, these are in 'col' format) \n"
 			  "model		: if options are provided instead of a model, then returns a model\n"		  
 			  "\noptions:\n"
-			  "-t type		: O Spline, 1 Trigonometric, 2 Hermite (default=0, t={0,1,2} )\n"
+			  "-t type		: O: Spline, 1: Trigonometric, 2: Hermite (default=0, t={0,1,2} )\n"
 			  "-d degree	: set the degree of B-Spline basis (default=1, d={0,1,2,3} )\n"
 			  "-r reg		: set the order of regularization (default=1) r={0,1,2,...}\n"
 			  "-n bins		: set the number of bins (default 10)\n"
@@ -154,7 +154,7 @@ int parse_command_line(int nrhs, const mxArray *prhs[], char *model_file_name)
 				param.numbins = atoi(argv[i]);
 				break;
 			default:
-				mexPrintf("unknown option\n");
+				mexPrintf("Error: unknown option\n", argv[i-1][1]);
 				return 1;
 		}
 	}
@@ -242,7 +242,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 		int err=0;
 
 		if(!mxIsDouble(prhs[0])) {
-			mexPrintf("Error: input features must be double\n");
+			mexPrintf("Error: feats must be double.\n");
 			fake_answer(plhs);
 			return;
 		}
@@ -250,31 +250,37 @@ void mexFunction( int nlhs, mxArray *plhs[],
 			err = read_problem_dense(prhs[0]);
 		else
 		{
-			mexPrintf("Training_instance_matrix must be dense\n");
+			mexPrintf("Error: fesats must be dense.\n");
 			fake_answer(plhs);
 			return;
 		}
-		if(mxIsClass(prhs[1],"char")){
+		if (nrhs > 1){
+			if(mxIsClass(prhs[1],"char")){ // options are specified
+				inputModel = false;
+				if(parse_command_line(nrhs, prhs, NULL))
+				{
+					exit_with_help();
+					fake_answer(plhs);
+					delete [] x;
+					return;
+				}
+				model = new additiveModel(&param, x, dim, nvec); //initialize
+			}else{
+				inputModel = true;
+				model = new additiveModel();
+				error_msg = matlab_matrix_to_model(model,prhs[1]);
+				if(error_msg){
+					mexPrintf("Error: can't read model: %s\n", error_msg);
+					delete [] x;
+					delete model;
+					fake_answer(plhs);
+					return;
+				}
+			}
+		}else{ //use default params
 			inputModel = false;
-			if(parse_command_line(nrhs, prhs, NULL))
-			{
-				exit_with_help();
-				fake_answer(plhs);
-				delete [] x;
-				return;
-			}
-			model = new splineModel(&param, x, dim, nvec); //initialize
-		}else{
-			inputModel = true;
-			model = new splineModel();
-			error_msg = matlab_matrix_to_model(model,prhs[1]);
-			if(error_msg){
-				mexPrintf("Error: can't read model: %s\n", error_msg);
-				delete [] x;
-				delete model;
-				fake_answer(plhs);
-				return;
-			}
+			parse_command_line(nrhs, prhs, NULL);
+			model = new additiveModel(&param, x, dim, nvec);
 		}
 		error_msg = check_parameter(&param);
 

@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include "splinemodel.h"
+#include "additiveModel.h"
 #include "mex.h"
 
 #if MX_API_VER < 0x07030000
@@ -31,7 +31,7 @@ static const char *field_names[] = {
 	"bias",
 };
 
-const char *model_to_matlab_structure(mxArray *plhs[], splineModel *model_)
+const char *model_to_matlab_structure(mxArray *plhs[], additiveModel *model_)
 {
 	int i,out_id=0;
 	double *ptr; 
@@ -170,7 +170,7 @@ const char *model_to_matlab_structure(mxArray *plhs[], splineModel *model_)
 	return NULL;
 }
 
-const char *matlab_matrix_to_model(splineModel *model_, const mxArray *matlab_struct)
+const char *matlab_matrix_to_model(additiveModel *model_, const mxArray *matlab_struct)
 {
 	int i, num_of_fields;
 	double *ptr;

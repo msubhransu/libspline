@@ -1,5 +1,5 @@
-#ifndef _SPLINEMODEL_H
-#define _SPLINEMODEL_H
+#ifndef _ADDITIVEMODEL_H
+#define _ADDITIVEMODEL_H
 
 
 // problem parameters
@@ -32,7 +32,7 @@ struct parameter {
 enum ENCODING {SPLINE, TRIGONOMETRIC, HERMITE}; 
 
 //spline model
-class splineModel{
+class additiveModel{
 	
 public:
 	//encoding type(0 splines, 1 Fourier, 2 Hermite) 
@@ -76,10 +76,10 @@ public:
 	// weights to normalize the dimensions
 	double *dimwts;
 	
-	splineModel();
-	splineModel(const parameter *, double **, int, int);
-	void splineTrain(double **x, const double *, const int, const parameter *);
-	void splinePredict(double **, double *, double *, const int);
+	additiveModel();
+	additiveModel(const parameter *, double **, int, int);
+	void train(double **x, const double *, const int, const parameter *);
+	void predict(double **, double *, double *, const int);
 	void getAccuracy(double *, double *, const int, int&, double&, double&, double& );
 	void display();
 	void getBasisIndex(double x, int dimidx, int &ei, double &ai);
@@ -89,7 +89,7 @@ public:
 	void projectDense(int ei, double *wts, double st, double *wd);
 	void projectDenseW(int ei, double *wts, double st, double *wd);
 
-	~splineModel();
+	~additiveModel();
 };
 #endif
 
