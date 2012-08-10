@@ -1,41 +1,52 @@
-LIBSPLINE is a library for training additive classifiers based on B-splines. 
-
-Usage: 
-
-model = splinetrain(training_label_vector, training_instance_matrix, 'options', 'col');\n"
-	"options:\n"
-	"-d degree   : set the degree of B-Spline basis (default=1, d={0=constant,1=linear,2=quadratic,3=cubic} )\n"
-	"-r reg      : set the order of regularization (default=1) r={0,1,2,...}\n"
-	"-n bins     : set the number of bins (default 10)\n"
-	"-c cost     : set the parameter C (default 1)\n"
-	"-e epsilon  : set tolerance of termination criterion\n"
-	"		       Dual maximal violation <= eps; similar to libsvm (default 0.1)\n"
-	"-B bias     : if bias >= 0, instance x becomes [x; bias]; if < 0, no bias term added (default 1)\n"
-	"-wi weight  : weights adjust the parameter C of different classes (see README for details)\n"
-	"col:\n"
-	"	if 'col' is set, training_instance_matrix is parsed in column format, otherwise is in row format\n"
+LIBSPLINE is a library for training smooth additive classifiers based splines (and other representations).
 
 
-Details:
+It implements a slight modification of GLASS [3] for the classification setting, as well as two embeddings
+based on Fourier basis (Trigonometric and Hermite). The solver is based on LIBLINEAR's dual coordinate 
+descend algorithm. Features are computed online so there is very little memory overhead.  
 
--d degree : specifies the degree of uniformly spaced B-spline basis (d=0,1,2,3 are supported, corresponding to 
-			constant, linear, quadratic and cubic B-spline basis. 
--r reg    : Regularization based on a difference matrix of order r. r=0 corresponds to identity matrix, r=1 
-			corresponds to a first order difference matrix, and r=2 is the second order (D1^2), and so on. 
-			Recommended values of r are 0,1,2.
+The library is interfaced with MATLAB and provides three functions: 
+train 	: trains additive classifiers
+predict : predicts labels using trained models
+encode 	: encode features x -> \Phi(x), such that the decision function is w'\Phi(x). 
+	  These can be used directly with linear solvers such as LIBLINEAR.
 
-The rest of the options are based on LIBLINEAR's dual coordinate descent algorithm. See LIBLINEAR for more details. 
 
-If you find LIBSPLINE helpful, please cite it as:
+Usage: model = train(training_label_vector, training_instance_matrix, 'options', 'col');
+options:
+-t type     : 0: Spline, 1: Trigonometric, 2: Hermite  (default=0)
+-d degree   : set the B-Spline degree (default=1) d={0,1,2,3}
+-r reg      : set the order of regularization (default=1) r={0,1,2,...}
+-n bins     : set the number of bins (default 10)
+-c cost     : set the parameter C (default 1)
+-e epsilon  : set tolerance of termination criterion
+		       Dual maximal violation <= eps; similar to libsvm (default 0.1)
+-B bias     : if bias >= 0, instance x becomes [x; bias]; if < 0, no bias term added (default 1)
+-wi weight  : weights adjust the parameter C of different classes (see README for details)
+col:
+	if 'col' is set, training_instance_matrix is parsed in column format, otherwise is in row format
 
-LIBSPLINE : A Spline Library Based on LIBLINEAR
-www.cs.berkeley.edu/~smaji/projects/LIBSPLINE
+
+Usage: [predicted_label,accuracy,decision_values] = predict(test_label_vector, test_instance_matrix, model, 'col');
+options:
+	if 'col' is set, test_instance_matrix is parsed in column format, otherwise is in row format
+
+Usage: [encodedFeats, model] = encode(feats, [model or 'options'], 'col');
+outputs:
+encodedFeats	: encoded features (Note, these are in 'col' format) 
+model		: if options are provided instead of a model, then returns a model
+
+options:
+-t type		: O: Spline, 1: Trigonometric, 2: Hermite (default=0, t={0,1,2} )
+-d degree	: set the degree of B-Spline basis (default=1, d={0,1,2,3} )
+-r reg		: set the order of regularization (default=1) r={0,1,2,...}
+-n bins		: set the number of bins (default 10)
+
+References:
+
+[1] Linearized Smooth Additive Classifiers, Subhransu Maji, Web-scale Vision and Social Media Workshop, ECCV 2012
+[2] Max-margin Additive Classifiers for Detection, Subhransu Maji and Alexander C. Berg, ICCV 2009
+[3] Generalized linear additive smooth structures. Eilers, P., Marx, B., Journal of Computational and Graphical Statistics 11(4)
 
 For any questions and comments, please send your email to
 smaji@ttic.edu
-
-Other useful references:
-
-[1] Max-margin Additive Classifiers for Detection, Subhransu Maji and Alexander C. Berg, ICCV 2009
-[2] Linearized Smooth Additive Classifiers, Subhransu Maji, Web-scale Vision and Social Media Workshop, ECCV 2012
-[3] Generalized linear additive smooth structures. Eilers, P., Marx, B., Journal of Computational and Graphical Statistics 11(4)
