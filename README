@@ -1,8 +1,9 @@
-LIBSPLINE is a library for training smooth additive classifiers based on splines (and other representations).
+LIBSPLINE is a library for training smooth additive classifiers based on splines (and other representations)
 
-It implements a slight modification of GLASS [3] for the classification setting, as well as two embeddings
+It implements a slight modification of GLASS [3] for the classification setting, as well as two embeddings 
 based on Fourier basis (Trigonometric and Hermite). The solver is based on LIBLINEAR's dual coordinate 
-descend algorithm. Features are computed online so there is very little memory overhead.  
+descend algorithm. Features are computed online to minimize memory overhead during training.
+
 
 The library is interfaced with MATLAB and provides three functions: 
 train 	: trains additive classifiers

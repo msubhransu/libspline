@@ -286,143 +286,129 @@ void additiveModel::train(double **x,             // training data
   double PGmax_old = INF;
   double PGmin_old = -INF;
   double PGmax_new, PGmin_new;
-  while(iter < MAX_OUTER_ITERS)
-    {	PGmax_new = -INF;
-      PGmin_new = INF;
+  while(iter < MAX_OUTER_ITERS){
+    PGmax_new = -INF;
+    PGmin_new = INF;
 		
-      for (i=0; i<active_size; i++)
-	{
-	  int j = i+rand()%(active_size-i);
-	  swap(index[i], index[j]);
-	}
+    for (i=0; i<active_size; i++){
+      int j = i+rand()%(active_size-i);
+      swap(index[i], index[j]);
+    }
 		
-      for (s=0;s<active_size;s++)
-	{
-	  i = index[s];
-	  G = bias*param->bias;
-	  schar yi = (schar)y[i];
-	  xi = x[i];
-	  wo = 0;
-	  for(j = 0; j < dim ; j++) //compute the gradient
-	    {
-	      if(st[j] > 0)
-		{
-		  if(encoding == SPLINE){
-		    bSplineEncoder(xi[j],j,ei,ew);
-		    for(k=0; k <= degree; k++)
-		      G += st[j]*w[wo+ei-k]*ew[degree-k]; //sparse (implicit wd)
-		  }else if(encoding == TRIGONOMETRIC){
-		    trigEncoder(xi[j],j,xd);
-		    for(k=0; k < numbasis; k++)
-		      G += w[wo+k]*xd[k]; 
-		  }else if(encoding == HERMITE){
-		    hermiteEncoder(xi[j],j,xd);
-		    for(k=0; k < numbasis; k++)
-		      G += w[wo+k]*xd[k]; 
-		  }
-		}
-	      wo += numbasis;
-	    }
-	  G = G*yi-1;
-			
-	  if(yi == 1) 
-	    C = param->Cp;
-	  else 
-	    C = param->Cn;
-			
-	  PG = 0;
-	  if (alpha[i] == 0)
-	    {
-	      if (G > PGmax_old)
-		{
-		  active_size--;
-		  swap(index[s], index[active_size]);
-		  s--;
-		  continue;
-		}
-	      else if (G < 0)
-		PG = G;
-	    }
-	  else if (alpha[i] == C)
-	    {
-	      if (G < PGmin_old)
-		{
-		  active_size--;
-		  swap(index[s], index[active_size]);
-		  s--;
-		  continue;
-		}
-	      else if (G > 0)
-		PG = G;
-	    }
-	  else
-	    PG = G;
-			
-	  PGmax_new = max(PGmax_new, PG);
-	  PGmin_new = min(PGmin_new, PG);
-			
-	  if(fabs(PG) > 1.0e-12)
-	    {
-	      double alpha_old = alpha[i];
-	      alpha[i] = min(max(alpha[i] - G/Q[i], 0.0), C);
-	      d = (alpha[i] - alpha_old)*yi;
-	      wo = 0;
-	      for(j = 0; j < dim ; j++) 
-		{
-		  if(st[j] > 0)
-		    {
-		      if(encoding == SPLINE){
-			bSplineEncoder(xi[j],j,ei,ew);
-			if(reg == 0){ //identity matrix 
-			  for(k=0; k <= degree;k++){
-			    w[wo+ei-k] += d*st[j]*ew[degree-k];
-			  }
-			}
-			else{ //D_d matrix regularization
-			  projectDenseW(ei,ew,st[j],xd);
-			  for(k=0; k < numbasis;k++)
-			    w[wo+k] += d*xd[k];
-			}
-		      }else if(encoding == TRIGONOMETRIC){
-			trigEncoder(xi[j],j,xd);
-			for(k=0; k < numbasis; k++)
-			  w[wo+k] += d*xd[k]; //sparse (implicit wd)
-		      }else if(encoding == HERMITE){
-			hermiteEncoder(xi[j],j,xd);
-			for(k=0; k < numbasis; k++)
-			  w[wo+k] += d*xd[k]; //sparse (implicit wd)
-		      }
-		    }
-		  wo += numbasis;
-		}
-	      bias += d*param->bias;
-	    }
+    for (s=0;s<active_size;s++){
+      i = index[s];
+      G = bias*param->bias;
+      schar yi = (schar)y[i];
+      xi = x[i];
+      wo = 0;
+      for(j = 0; j < dim ; j++){ //compute the gradient
+	if(st[j] > 0){
+	  if(encoding == SPLINE){
+	    bSplineEncoder(xi[j],j,ei,ew);
+	    for(k=0; k <= degree; k++)
+	      G += st[j]*w[wo+ei-k]*ew[degree-k]; //sparse (implicit wd)
+	  }else if(encoding == TRIGONOMETRIC){
+	    trigEncoder(xi[j],j,xd);
+	    for(k=0; k < numbasis; k++)
+	      G += w[wo+k]*xd[k]; 
+	  }else if(encoding == HERMITE){
+	    hermiteEncoder(xi[j],j,xd);
+	    for(k=0; k < numbasis; k++)
+	      G += w[wo+k]*xd[k]; 
+	  }
 	}
-      iter++;
-      if(iter % 10 == 0)
-	printf(".");
-		
-      if(PGmax_new - PGmin_new <= param->eps)
-	{
-	  if(active_size == nvec)
-	    break;
-	  else
-	    {
-	      active_size = nvec;
-	      printf("*");
-	      PGmax_old = INF;
-	      PGmin_old = -INF;
-	      continue;
-	    }
+	wo += numbasis;
+      }
+      G = G*yi-1;
+      
+      if(yi == 1) 
+	C = param->Cp;
+      else 
+	C = param->Cn;
+      
+      PG = 0;
+      if (alpha[i] == 0){
+	if (G > PGmax_old){
+	  active_size--;
+	  swap(index[s], index[active_size]);
+	  s--;
+	  continue;
 	}
-      PGmax_old = PGmax_new;
-      PGmin_old = PGmin_new;
-      if (PGmax_old <= 0)
+	else if (G < 0)
+	  PG = G;
+      }
+      else if (alpha[i] == C){
+	if (G < PGmin_old){
+	  active_size--;
+	  swap(index[s], index[active_size]);
+	  s--;
+	  continue;
+	}
+	else if (G > 0)
+	  PG = G;
+      }
+      else
+	PG = G;
+      
+      PGmax_new = max(PGmax_new, PG);
+      PGmin_new = min(PGmin_new, PG);
+      
+      if(fabs(PG) > 1.0e-12){
+	double alpha_old = alpha[i];
+	alpha[i] = min(max(alpha[i] - G/Q[i], 0.0), C);
+	d = (alpha[i] - alpha_old)*yi;
+	wo = 0;
+	for(j = 0; j < dim ; j++) {
+	  if(st[j] > 0){
+	    if(encoding == SPLINE){
+	      bSplineEncoder(xi[j],j,ei,ew);
+	      if(reg == 0){ //identity matrix 
+		for(k=0; k <= degree;k++){
+		  w[wo+ei-k] += d*st[j]*ew[degree-k];
+		}
+	      }
+	      else{ //D_d matrix regularization
+		projectDenseW(ei,ew,st[j],xd);
+		for(k=0; k < numbasis;k++)
+		  w[wo+k] += d*xd[k];
+	      }
+	    }else if(encoding == TRIGONOMETRIC){
+	      trigEncoder(xi[j],j,xd);
+	      for(k=0; k < numbasis; k++)
+		w[wo+k] += d*xd[k]; //sparse (implicit wd)
+	    }else if(encoding == HERMITE){
+	      hermiteEncoder(xi[j],j,xd);
+	      for(k=0; k < numbasis; k++)
+		w[wo+k] += d*xd[k]; //sparse (implicit wd)
+	    }
+	  }
+	  wo += numbasis;
+	}
+	bias += d*param->bias;
+      }
+    }
+    iter++;
+    if(iter % 10 == 0)
+      printf(".");
+    
+    if(PGmax_new - PGmin_new <= param->eps){
+      if(active_size == nvec)
+	break;
+      else{
+	active_size = nvec;
+	printf("*");
 	PGmax_old = INF;
-      if (PGmin_old >= 0)
 	PGmin_old = -INF;
-    }//outer iteration
-	
+	continue;
+      }
+    }
+    PGmax_old = PGmax_new;
+    PGmin_old = PGmin_new;
+    if (PGmax_old <= 0)
+      PGmax_old = INF;
+    if (PGmin_old >= 0)
+      PGmin_old = -INF;
+  }//outer iteration
   printf("done.\n");
 	
   //fold the bias into the model
@@ -457,26 +443,24 @@ void additiveModel::predict(double **x,
     wo=0;
     di=bias;
 		
-    for(j = 0; j < dim ; j++)
-      {
-	if(st[j] > 0)
-	  {
-	    if(encoding == SPLINE){
-	      bSplineEncoder(x[i][j],j,ei,ew);
-	      for(k=0; k <= degree; k++)
-		di += st[j]*w[wo+ei-k]*ew[degree-k]; //sparse (implicit wd)
-	    }else if(encoding == TRIGONOMETRIC){
-	      trigEncoder(x[i][j],j,xd);
-	      for(k=0; k < numbasis; k++)
-		di += w[wo+k]*xd[k]; //sparse (implicit wd)
-	    }else if(encoding == HERMITE){
-	      hermiteEncoder(x[i][j],j,xd);
-	      for(k=0; k < numbasis; k++)
-		di += w[wo+k]*xd[k]; //sparse (implicit wd)
-	    }
-	  }
-	wo += numbasis;
+    for(j = 0; j < dim ; j++){
+      if(st[j] > 0){
+	if(encoding == SPLINE){
+	  bSplineEncoder(x[i][j],j,ei,ew);
+	  for(k=0; k <= degree; k++)
+	    di += st[j]*w[wo+ei-k]*ew[degree-k]; 
+	}else if(encoding == TRIGONOMETRIC){
+	  trigEncoder(x[i][j],j,xd);
+	  for(k=0; k < numbasis; k++)
+	    di += w[wo+k]*xd[k]; 
+	}else if(encoding == HERMITE){
+	  hermiteEncoder(x[i][j],j,xd);
+	  for(k=0; k < numbasis; k++)
+	    di += w[wo+k]*xd[k]; 
+	}
       }
+      wo += numbasis;
+    }
     d[i] = di;
     l[i] = di >= 0? 1.0 : -1.0;
   }
