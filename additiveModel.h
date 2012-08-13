@@ -75,9 +75,12 @@ class additiveModel{
 
   // weights to normalize the dimensions
   double *dimwts;
-	
+
+  //constructors
   additiveModel();
   additiveModel(const parameter *, double **, int, int);
+
+  //methods
   void train(double **x, const double *, const int, const parameter *);
   void predict(double **, double *, double *, const int);
   void getAccuracy(double *, double *, const int, int&, double&, double&, double& );
@@ -89,6 +92,7 @@ class additiveModel{
   void projectDense(int ei, double *wts, double st, double *wd);
   void projectDenseW(int ei, double *wts, double st, double *wd);
 
+  //desctructor
   ~additiveModel();
 };
 #endif

@@ -84,6 +84,7 @@ void additiveModel::trigEncoder(double x, int dimidx, double *xd){
     xd[i] *= st[dimidx]*dimwts[i];
   }
 }
+
 // Hermite embedding
 void additiveModel::hermiteEncoder(double x, int dimidx, double *xd){
   double cx = (xmax[dimidx] + xmin[dimidx])/2;
@@ -118,7 +119,6 @@ additiveModel::additiveModel(){
   w = NULL;
   bias = 0;
 }
-
 
 //initialize a additiveModel given the data
 additiveModel::additiveModel(const parameter *param,
@@ -218,7 +218,6 @@ additiveModel::additiveModel(const parameter *param,
   bias = 0; // bias term for the classifier
 }
 
-
 // train the model using LIBLINEAR's dual coordinate descend algorithm
 // the learned model is L2 regularized, L1 loss (hinge loss) SVM
 void additiveModel::train(double **x,             // training data
@@ -245,41 +244,38 @@ void additiveModel::train(double **x,             // training data
   }	
 	
   // initialize the encodings, alpha, index, Q, ...
-  for(i = 0; i < nvec;i++)
-    {
-      alpha[i]=0;
-      index[i]=i;
-      Q[i] = param->bias * param->bias;
-      xi = x[i];
-		
-      for(j=0; j < dim ; j++)
-	{
-	  if(st[j] > 0)
-	    {	if(encoding == SPLINE)
-		{
-		  bSplineEncoder(xi[j],j,ei,ew);
-		  if(reg == 0){ //identity matrix 
-		    for(k=0;k<= degree;k++){
-		      Q[i] += st[j]*st[j]*ew[k]*ew[k];
-		    }
-		  }
-		  else{ //D_d matrix regularization
-		    projectDense(ei,ew,st[j],xd);
-		    for(k=0; k < numbasis;k++)
-		      Q[i] += xd[k]*xd[k];
-		  }
-		}else if(encoding == TRIGONOMETRIC){
-		trigEncoder(xi[j],j,xd);
-		for(k=0; k < numbasis;k++)
-		  Q[i] += xd[k]*xd[k];
-	      }else if(encoding == HERMITE){
-		hermiteEncoder(xi[j],j,xd);
-		for(k=0; k < numbasis;k++)
-		  Q[i] += xd[k]*xd[k];
-	      }
+  for(i = 0; i < nvec;i++){
+    alpha[i]=0;
+    index[i]=i;
+    Q[i] = param->bias * param->bias;
+    xi = x[i];
+    
+    for(j=0; j < dim ; j++){
+      if(st[j] > 0){
+	if(encoding == SPLINE){
+	  bSplineEncoder(xi[j],j,ei,ew);
+	  if(reg == 0){ //identity matrix 
+	    for(k=0;k<= degree;k++){
+	      Q[i] += st[j]*st[j]*ew[k]*ew[k];
 	    }
+	  }else{ //D_d matrix regularization
+	    projectDense(ei,ew,st[j],xd);
+	    for(k=0; k < numbasis;k++)
+	      Q[i] += xd[k]*xd[k];
+	  }
+	}else if(encoding == TRIGONOMETRIC){
+	  trigEncoder(xi[j],j,xd);
+	  for(k=0; k < numbasis;k++)
+	    Q[i] += xd[k]*xd[k];
+	}else if(encoding == HERMITE){
+	  hermiteEncoder(xi[j],j,xd);
+	  for(k=0; k < numbasis;k++)
+	    Q[i] += xd[k]*xd[k];
 	}
+      }
     }
+  }
+  
   double C,d,G;
   // PG: projected gradient, for shrinking and stopping (see LIBLINEAR)
   double PG;

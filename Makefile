@@ -2,7 +2,6 @@
 
 MATLABDIR ?= /Applications/MATLAB_R2011a.app
 CXX ?= g++
-CC ?= gcc
 CFLAGS = -Wall -Wconversion -O3 -fPIC -I$(MATLABDIR)/extern/include -I..
 
 MEX = $(MATLABDIR)/bin/mex
@@ -11,9 +10,7 @@ MEX_OPTION = CC\#$(CXX) CXX\#$(CXX) CFLAGS\#"$(CFLAGS)" CXXFLAGS\#"$(CFLAGS)"
 # MEX_OPTION += -largeArrayDims
 MEX_EXT = $(shell $(MATLABDIR)/bin/mexext)
 
-all: matlab 
-
-matlab: train.$(MEX_EXT) predict.$(MEX_EXT) encode.$(MEX_EXT)
+all: train.$(MEX_EXT) predict.$(MEX_EXT) encode.$(MEX_EXT)
 
 demo:demo.cpp additiveModel.o
 	$(CXX) $(CFLAGS) demo.cpp additiveModel.o -o demo
