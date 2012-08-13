@@ -46,7 +46,7 @@ set(gca,'FontSize',16);
 fprintf('\n\nTraining various additive models (%i points)\n', length(Y));
 for j = 1:length(encoding),
     tic;
-    paramstr = sprintf('-t %i -d 3 -r 2 -n 10 -B 1 -c 10',encoding(j));
+    paramstr = sprintf('-t %i -d 3 -r 1 -n 10 -B 1 -c 10',encoding(j));
     model = train(Y,X,paramstr);
     [l,a,d] = predict(Y,X,model);
     plot(d(1:2*r+1),[linecolor(j) '-'],'LineWidth',2);
