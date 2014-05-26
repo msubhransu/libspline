@@ -22,6 +22,7 @@ Below is the syntax for each of the commands.
 #### Train
 <pre>
 model = train(training_label_vector, training_instance_matrix, 'options', 'col');
+
 options:
 -t type     : 0: Spline, 1: Trigonometric, 2: Hermite  (default=0)
 -d degree   : set the B-Spline degree (default=1) d={0,1,2,3}
@@ -29,12 +30,14 @@ options:
 -n bins     : set the number of bins (default 10)
 -c cost     : set the parameter C (default 1)
 -e epsilon  : set tolerance of termination criterion
-				Dual maximal violation eps; similar to libsvm (default 0.1)
--B bias     : if bias 0, instance x becomes [x; bias]; 
-				if bias 0, no bias term is added (default 1)
--wi weight  : weights adjust the parameter C of different classes (see README for details)
+			  dual maximal violation eps; similar to libsvm (default 0.1)
+-B bias     : if bias >= 0, instance x becomes [x; bias]; 
+			  if bias < 0, no bias term is added (default 1)
+-wi weight  : weights adjust the parameter C of different classes 
+			  (see README for details)
 col:
-	if 'col' is set, training_instance_matrix is parsed in column format, otherwise is in row format
+	if 'col' is set, training_instance_matrix is parsed in column format, 
+	otherwise is in row format
 </pre>	
 #### Predict	
 
@@ -51,7 +54,7 @@ options:
 [encodedFeats, model] = encode(feats, [model or 'options'], 'col');
 outputs:
 encodedFeats	: encoded features (Note, these are in 'col' format) 
-model		: if options are provided instead of a model, then returns a model
+model		    : if options are provided instead of a model, then returns a model
 
 options:
 -t type		: O: Spline, 1: Trigonometric, 2: Hermite (default=0, t={0,1,2} )
