@@ -20,7 +20,6 @@ The library is interfaced with MATLAB and provides three functions:
 Below is the syntax for each of the commands.
 
 #### Train
-<pre>
 model = train(training_label_vector, training_instance_matrix, 'options', 'col');
 options:
 -t type     : 0: Spline, 1: Trigonometric, 2: Hermite  (default=0)
@@ -34,7 +33,6 @@ options:
 -wi weight  : weights adjust the parameter C of different classes (see README for details)
 col:
 	if 'col' is set, training_instance_matrix is parsed in column format, otherwise is in row format
-</pre>
 	
 #### Predict	
 
