@@ -1,3 +1,10 @@
+/* Author : Subhransu Maji
+ *
+ * Headers for additive model
+ * 
+ * Version 1.0
+ */
+
 #ifndef _ADDITIVEMODEL_H
 #define _ADDITIVEMODEL_H
 

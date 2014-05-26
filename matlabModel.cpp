@@ -1,3 +1,9 @@
+/* Author : Subhransu Maji
+ *
+ * Code for encoding the matlab model
+ *
+ * Version 1.0
+ */
 #include <stdlib.h>
 #include <string.h>
 #include "additiveModel.h"

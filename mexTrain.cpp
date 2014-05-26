@@ -1,3 +1,9 @@
+/* Author : Subhransu Maji
+ *
+ * Matlab entry code for training
+ *
+ * Version 1.0
+ */
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>

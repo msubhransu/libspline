@@ -1,3 +1,10 @@
+/* Author : Subhransu Maji
+ *
+ * Implements encoding methods
+ *
+ * Version 1.0
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -7,12 +14,15 @@
 
 typedef signed char schar;
 template <class T> static inline void swap(T& x, T& y) { T t=x; x=y; y=t; }
+
 #ifndef min
 template <class T> static inline T min(T x,T y) { return (x<y)?x:y; }
 #endif
+
 #ifndef max
 template <class T> static inline T max(T x,T y) { return (x>y)?x:y; }
 #endif
+
 #ifndef PI
 #define PI 3.14159265358979
 #endif
