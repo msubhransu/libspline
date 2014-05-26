@@ -30,9 +30,9 @@ options:
 -n bins     : set the number of bins (default 10)
 -c cost     : set the parameter C (default 1)
 -e epsilon  : set tolerance of termination criterion
-			  dual maximal violation eps; similar to libsvm (default 0.1)
--B bias     : if bias >= 0, instance x becomes [x; bias]; 
-			  if bias < 0, no bias term is added (default 1)
+			  dual maximal violation &lt; eps; similar to libsvm (default 0.1)
+-B bias     : if bias &gt;= 0, instance x becomes [x; bias]; 
+			  if bias &lt; 0, no bias term is added (default 1)
 -wi weight  : weights adjust the parameter C of different classes 
 			  (see README for details)
 col:
